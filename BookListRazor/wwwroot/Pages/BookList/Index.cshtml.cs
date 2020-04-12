@@ -6,8 +6,10 @@ using BookListRazor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace BookListRazor
+
+namespace BookListRazor.Pages.BookList
 {
     public class IndexModel : PageModel
     {
@@ -17,12 +19,14 @@ namespace BookListRazor
         {
             _db = db;
         }
+
         public IEnumerable<Book> Books { get; set; }
 
         public async Task OnGet()
         {
             Books = await _db.Book.ToListAsync();
         }
+
         public async Task<IActionResult> OnPostDelete(int id)
         {
             var book = await _db.Book.FindAsync(id);
@@ -30,14 +34,10 @@ namespace BookListRazor
             {
                 return NotFound();
             }
-            else
-            {
-                _db.Book.Remove(book);
-                await _db.SaveChangesAsync();
+            _db.Book.Remove(book);
+            await _db.SaveChangesAsync();
 
-                return RedirectToPage("Index");
-            }
+            return RedirectToPage("Index");
         }
-
     }
 }
