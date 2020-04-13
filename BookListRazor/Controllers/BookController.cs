@@ -26,8 +26,9 @@ namespace BookListRazor.Controllers
         }
 
         [HttpDelete]
+        [Route("DeleteBook")]
         public async Task<IActionResult> Delete(int id)
-        {
+        {   
             var bookFromDb = await _db.Book.FirstOrDefaultAsync(u => u.Id == id);
             if (bookFromDb == null)
             {

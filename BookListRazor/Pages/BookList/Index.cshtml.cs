@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookListRazor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
 
 namespace BookListRazor.Pages.BookList
 {
@@ -19,7 +15,7 @@ namespace BookListRazor.Pages.BookList
         {
             _db = db;
         }
-
+        
         public IEnumerable<Book> Books { get; set; }
 
         public async Task OnGet()
