@@ -1,0 +1,86 @@
+﻿@page
+@model BookListRazor.Pages.Category.CreateModel
+
+<br />
+<h2 class="text-info">Create New Category</h2>
+<br />
+<div class="border container" style="padding:30px;">
+    <form id="IdCreateCategory" method="post">
+        <div class=" form-group row">
+            <div class=" col-3">
+                <label for="Name">Name</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idName" required placeholder="Enter Category Name" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="Description">Description</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idDescription" required placeholder="Enter Category Description" class="form-control" >
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="ParentCategoryId">ParentCategoryId</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idParentCategoryId" required placeholder="Enter ParentCategoryId" class="form-control"  />
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class=" col-3 offset-3">
+                <input type="submit" id="btncreate" value="Create" class="btn btn-primary form-control">
+            </div>
+            <div class=" col-3">
+                <a asp-page="List" class="btn btn-success form-control">Back To List</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IdCreateCategory").submit(function (event) {
+                event.preventDefault();
+
+                var formData = {
+                    name: $("#idName").val(),
+                    description: $("#idDescription").val(),
+                    parentCategoryId:  parseInt($("#idParentCategoryId").val())
+                };
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: "https://localhost:5001/api/Category/Add",
+                        dataType: "json",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            if (!response.isError) {
+                                if (response.result > 0) {
+                                    toastr.success("Category Created Successfully!");
+                                }
+                            }
+                            else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function (res, err) {
+                            console.log(res.responseText);
+                            console.log(err);
+                        }
+                    });
+                } catch (e) {
+                    console.log(e)
+                }
+
+            });
+        });
+    </script>
+}
