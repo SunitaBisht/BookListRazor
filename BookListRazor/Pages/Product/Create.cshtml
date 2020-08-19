@@ -1,0 +1,121 @@
+﻿@page
+@model BookListRazor.Pages.Product.CreateModel
+
+
+<br />
+<h2 class="text-info">Create New Product</h2>
+<br />
+<div class="border container" style="padding:30px;">
+    <form id="IdCreateProduct" method="post">
+        <div class=" form-group row">
+            <div class=" col-3">
+                <label for="Name">Name</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idName"  placeholder="Enter Product Name" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="Price">Price</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idPrice"  placeholder="Enter Product Price" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="Description">Description</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idDescription"  placeholder="Enter Product Description" class="form-control" />
+            </div>
+        </div>
+        @*<div class=" form-group row">
+            <div class="col-3">
+                <label for="IsInStock">IsInStock</label>
+            </div>
+            <div class=" col-6">
+                <select id="idIsInStock">
+                    <option value="Select">Select Option</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+        </div>*@
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="StockQuantity">StockQuantity</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idStockQuantity" placeholder="Enter Product StockQuantity" class="form-control" />
+            </div>
+        </div>
+
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="CategoryId">CategoryId</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idCategoryId"  placeholder="Enter CategoryId" class="form-control" />
+            </div>
+        </div>
+
+        <div class=" form-group row">
+            <div class=" col-3 offset-3">
+                <input type="submit" id="btncreate" value="Create" class="btn btn-primary form-control">
+            </div>
+            <div class=" col-3">
+                <a asp-page="ProductList" class="btn btn-success form-control">Back To List</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IdCreateProduct").submit(function (event) {
+                event.preventDefault();
+
+                var FormData = {
+                    name: $("#idName").val(),
+                    price: parseInt( $("#idPrice").val()),
+                    description: $("#idDescription").val(),
+                    //isInStock: $("#idIsInStock").val(),
+                    stockQuantity:parseInt( $("#idStockQuantity").val()),
+                    categoryId: parseInt ($("#idCategoryId").val()),
+                };
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: "https://localhost:5001/api/Product/Add",
+                        dataType: "json",
+                        data: JSON.stringify(FormData),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            if (!response.isError) {
+                                if (response.result > 0) {
+                                    toastr.success("Product Created Successfully!");
+                                     window.location.replace("https://localhost:44381/Product/ProductList");
+                                }
+                            }
+                            else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function (res, err) {
+                            console.log(res.responseText);
+                            console.log(err);
+                        }
+                    });
+                }catch (e) {
+                    console.log(e);
+                }
+            });
+        });
+    </script>
+}
+

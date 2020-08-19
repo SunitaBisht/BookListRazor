@@ -1,0 +1,104 @@
+﻿@page
+@model BookListRazor.Pages.Product.CategoryGetModel
+
+
+<br />
+<h2 class="text-info"> ProductCategory</h2>
+<br />
+<div class="border container" style="padding:30px;">
+    <form id="IdEditCategory" method="post">
+        <div class=" form-group row">
+            <div class=" col-3">
+                <label for="id">Id</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="c" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class=" col-3">
+                <label for="Name">Name</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idName" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="Description">Description</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idDescription" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="IsActive">IsActive</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idIsActive" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="ParentCategoryId">ParentCategoryId</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idParentCategoryId" class="form-control" />
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="CreatedOn">CreatedOn</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idCreatedOn" class="form-control" />
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="LastUpdatedOn">LastUpdatedOn</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idLastUpdatedon" class="form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var param = new URL(document.URL).searchParams;
+            var Id = param.get("categoryId");
+
+            if (Id) {
+                $("#idtxt").val(Id);
+            }
+            $.ajax({
+                url: "https://localhost:5001/api/Category/GetById?Id=" + Id,
+                type: "GET",
+                dataType: "json",
+                dataSrc: "response",
+                success: function (response) {
+                    console.log(response);
+                    if (response.isError == false) {
+
+                        $("#idName").val(response.result.name);
+                        $("#idDescription").val(response.result.description);
+                        $("#idIsActive").val(response.result.isActive);
+                        $("#idParentCategoryId").val(response.result.parentCategoryId);
+                        $("#idCreatedOn").val(response.result.createdOn);
+                        $("#idLastUpdatedon").val(response.result.lastUpdatedon);
+                    }
+                },
+                error: function (error) {
+                    console.log(`Error ${error}`);
+                }
+            });
+        });
+    </script>
+}

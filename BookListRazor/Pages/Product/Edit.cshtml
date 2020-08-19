@@ -1,17 +1,17 @@
 ﻿@page
-@model BookListRazor.Pages.Category.EditModel
+@model BookListRazor.Pages.Product.EditModel
 
 <br />
-<h2 class="text-info"> Edit Category</h2>
+<h2 class="text-info">Edit Product</h2>
 <br />
 <div class="border container" style="padding:30px;">
-    <form id="IdEditCategory" method="post">
+    <form id="IdEditProduct" method="post">
         <div class=" form-group row">
-            <div class=" col-3">    
+            <div class=" col-3">
                 <label for="id">Id</label>
             </div>
             <div class=" col-6">
-                <input type="text" readonly id="idtxt" required class="form-control">
+                <input type="text" readonly id="idtxt" class="form-control">
             </div>
         </div>
         <div class=" form-group row">
@@ -19,7 +19,15 @@
                 <label for="Name">Name</label>
             </div>
             <div class=" col-6">
-                <input type="text" id="idName" required placeholder="Enter Category Name" class="form-control">
+                <input type="text" id="idName" placeholder="Enter Product Name" class="form-control">
+            </div>
+        </div>
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="Price">Price</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idPrice" placeholder="Enter Product Price" class="form-control">
             </div>
         </div>
         <div class=" form-group row">
@@ -27,27 +35,51 @@
                 <label for="Description">Description</label>
             </div>
             <div class=" col-6">
-                <input type="text" id="idDescription" required placeholder="Enter Description" class="form-control">
+                <input type="text" id="idDescription" placeholder="Enter Product Description" class="form-control" />
             </div>
         </div>
-        <div class=" form-group row">
+        @*<div class=" form-group row">
             <div class="col-3">
-                <label for="ParentCategoryId">ParentCategoryId</label>
+                <label for="IsInStock">IsInStock</label>
             </div>
             <div class=" col-6">
-                <input type="text" id="idParentCategoryId" required placeholder="Enter ParentCategoryId" class="form-control" />
+                <select id="idIsInStock">
+                    <option value="Select">Select Option</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+        </div>*@
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="StockQuantity">StockQuantity</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idStockQuantity" placeholder="Enter Product StockQuantity" class="form-control" />
             </div>
         </div>
+
+        <div class=" form-group row">
+            <div class="col-3">
+                <label for="CategoryId">CategoryId</label>
+            </div>
+            <div class=" col-6">
+                <input type="text" id="idCategoryId" placeholder="Enter CategoryId" class="form-control" />
+            </div>
+        </div>
+
         <div class=" form-group row">
             <div class=" col-3 offset-3">
                 <input type="submit" id="btnedit" value="Update" class="btn btn-primary form-control">
             </div>
             <div class=" col-3">
-                <a asp-page="List" class="btn btn-success form-control">Back To List</a>
+                <a asp-page="ProductList" class="btn btn-success form-control">Back To List</a>
             </div>
         </div>
     </form>
 </div>
+
+
 
 @section Scripts
 {
@@ -60,7 +92,7 @@
                 $("#idtxt").val(Id);
             }
             $.ajax({
-                url: "https://localhost:5001/api/Category/GetById?Id=" + Id,
+                url: "https://localhost:5001/api/Product/GetById?Id=" + Id,
                 type: "GET",
                 dataType: "json",
                 dataSrc: "response",
@@ -69,8 +101,10 @@
                     if (response.isError == false) {
 
                         $("#idName").val(response.result.name);
+                        $("#idPrice").val(response.result.price);
                         $("#idDescription").val(response.result.description);
-                        $("#idParentCategoryId").val(response.result.parentCategoryId);
+                        $("#idStockQuantity").val(response.result.stockQuantity);
+                        $("#idCategoryId").val(response.result.categoryId);
                     }
                 },
                 error: function (error) {
@@ -78,30 +112,30 @@
                 }
             });
 
-
-
-            $("#IdEditCategory").submit(function (event) {
+            $("#IdEditProduct").submit(function (event) {
                 event.preventDefault();
 
-                var dataEdit = {
+                var ProdataEdit = {
                     id: parseInt($("#idtxt").val()),
                     name: $("#idName").val(),
+                    price: parseFloat($("#idPrice").val()),
                     description: $("#idDescription").val(),
-                    parentCategoryId: parseInt($("#idParentCategoryId").val())
+                    stockQuantity: parseInt($("#idStockQuantity").val()),
+                    categoryId: parseInt($("#idCategoryId").val())
                 };
 
                 $.ajax({
-                    url: "https://localhost:5001/api/Category/Edit",
+                    url: "https://localhost:5001/api/Product/Edit",
                     type: "PUT",
                     datatype: "json",
-                    data: JSON.stringify(dataEdit),
+                    data: JSON.stringify(ProdataEdit),
                     contentType: "application/json; charset=utf-8",
                     success: function (response) {
-                        console.log("update",response);
+                        console.log("update", response);
                         if (!response.isError) {
                             if (response.result > 0) {
                                 toastr.success("Update Successfully!");
-                                window.location.replace("https://localhost:44381/Category/List");
+                                window.location.replace("https://localhost:44381/Product/ProductList");
                             }
                         }
                         else {
@@ -113,7 +147,7 @@
                         console.log(err);
                     }
                 });
-                
+
             });
         });
     </script>
